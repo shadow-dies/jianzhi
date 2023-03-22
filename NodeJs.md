@@ -187,4 +187,6 @@ app.listen(1000);
 
 * 错误捕捉，express沿用NodeJs的Error-First模式（第一个参数为error对象），koa因为返回的是promise对象，使用try/catch来捕获错误
 
+* 异步实现：express通过回调来实现，koa通过async/await来实现。
+
 * 响应机制：express为立即响应（res.json/res.send），上层不能定义其他处理.但koa为中间件执行完后才响应(ctx.body = xxx),每一层都可以对响应进行自己的处理.

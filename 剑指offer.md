@@ -30,3 +30,32 @@ for (let i = 0; i < array.length; i++) {
     array[i] = new Array(row); // 将项默认为false
   }
   ```
+
+---
+
+# ACM模式解决方式
+
+通过readline来一行行写入，若是数组的话通过.splte(" ")分离成数组，再用.map(Number)转换为数字即可。
+
+
+```js
+const rl = require("readline").createInterface({ input: process.stdin });
+var iter = rl[Symbol.asyncIterator]();
+const readline = async () => (await iter.next()).value;
+
+void async function () {
+    let num = await readline(), inputs = [];
+    for(let i = 0; i < num; i++) {
+        let tokens = await readline();
+        inputs.push(tokens.split(' ').map(Number));
+    }
+    console.log(inputs);
+    for(let input of inputs) {
+        let sum = 0;
+        for(let num of input) {
+            sum += num;
+        }
+        console.log(sum);
+    }
+}()//main函数
+```
