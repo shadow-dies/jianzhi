@@ -876,3 +876,38 @@ fetch是原生js方法，没有使用XMLHttpRequest对象，使用fetch可以不
 fetch 不会发送跨域 cookie，除非你使用了 credentials 的初始化选项。（自 2018 年 8 月以后，默认的 credentials 政策变更为 same-origin。Firefox 也在 61.0b13 版本中进行了修改）
 
 ---
+
+### 并发池
+
+```js
+function addTask(options){
+    let task = request(options)
+    pool.push(task)
+    task.then((res)=>{
+      console.log(`${options.url}任务完成，耗时${(new Date()-now)/1000}秒`)
+      pool.splice(pool.indexOf(task),1)
+    })
+  }
+ 
+  function run(race){
+    race.then((res)=>{
+      let newOptions = requests.shift()
+      if(newOptions){
+        console.log(`${newOptions.url}开始执行,预计耗时${newOptions.delay/1000}秒`)
+        addTask(newOptions)
+        run(Promise.race(pool))
+      }
+ 
+    })
+  }
+  let pool = []
+  let max = 3
+  while(pool.length<max){
+    let options = requests.shift()
+    addTask(options)
+  }
+ 
+  let race = Promise.race(pool) // 返回最先完成的promise
+  run(race)
+
+```
